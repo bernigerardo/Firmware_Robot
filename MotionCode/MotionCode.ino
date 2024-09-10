@@ -1,6 +1,8 @@
 #include <Servo.h>
 
 // Pines de entrada
+
+// Movimiento Robot
 const int VerticalJoystickPin = A7; // Entradas analógica para la señal proporcional (0-5V)
 const int HorizontalJoystickPin = A6;
 const int VDirForwardPin = 3; // Dirección hacia delante 
@@ -8,8 +10,16 @@ const int VDirBackwardPin = 4; // Dirección hacia atrás
 const int HDirRightPin = 5; // Dirección hacia la derecha  
 const int HDirLeftPin = 6; // Dirección hacia la izquierda
 
+// Rodillo
+int rodillo = 7;
+int angulo;
+int step = 1;
+int anguloR = 113;
+int anguloNuevo;
+
 Servo rightServo;
 Servo leftServo;
+Servo Roller;
 
 void setup() {
   pinMode(VerticalJoystickPin, INPUT);
@@ -18,14 +28,17 @@ void setup() {
   pinMode(VDirBackwardPin, INPUT);
   pinMode(HDirRightPin, INPUT);
   pinMode(HDirLeftPin, INPUT);
+  pinMode(rodillo, INPUT);
 
   // Inicializar motores
   rightServo.attach(9);
   leftServo.attach(10);
+  Roller.attach(11);
 
   // Colocar motores en la posición media al iniciar
   rightServo.write(90);
   leftServo.write(90);
+  Roller.write(90);
 }
 
 void loop() {
@@ -70,6 +83,34 @@ void loop() {
         rightServo.write(90);
         leftServo.write(90);
     }
-
   }
+
+  //Roller
+  angulo = Roller.read();
+  //Si se acciona el rodillo
+  if (digitalRead(rodillo) == HIGH){
+    //Inicio suave en rampa
+    while (angulo<anguloR){
+      angulo = Roller.read();
+      anguloNuevo = angulo + step;
+      Roller.write(anguloNuevo);
+      delay(200);
+    }
+  }
+  //Si se desactiva el rodillo
+  if(digitalRead(rodillo) == LOW){
+    //Apagado ruave en rampa
+    while (angulo>90){
+      angulo = Roller.read();
+      anguloNuevo = angulo - step;
+      Roller.write (anguloNuevo);
+      delay(200);
+    }
+    //Posición estática en 90°
+    if(angulo<=90){
+      Roller.write(90);
+      delay(200);
+    }
+  }
+
 }
