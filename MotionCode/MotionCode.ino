@@ -48,11 +48,11 @@ void loop() {
     if (verticalForwardSignal == HIGH){
       //Mover ambos motores hacia delante
       rightServo.write(90 + VerticalServoAngle);
-      leftServo.write(90 - VerticalServoAngle);
+      leftServo.write(90 + VerticalServoAngle);
     } else if (verticalBackwardSignal == HIGH) {
       //Mover ambs motores hacia atrás
       rightServo.write(90 - VerticalServoAngle);
-      leftServo.write(90 + VerticalServoAngle);
+      leftServo.write(90 - VerticalServoAngle);
     }
   } else {
     //Si el Joystick vertical no está en uso
@@ -60,11 +60,11 @@ void loop() {
       if (horizontalRightSignal == HIGH){
         //Giro a la derecha: Motor derecho hacia atras y el izquierdo hacia delante
         rightServo.write(90 - HorizontalServoAngle);
-        leftServo.write(90 - HorizontalServoAngle);
+        leftServo.write(90 + HorizontalServoAngle);
       } else if (horizontalLeftSignal == HIGH){
         //Giro a la izquierda: Motor derecho hacia delante e izquierdo hacia atrás
         rightServo.write(90 + HorizontalServoAngle);
-        leftServo.write(90 + HorizontalServoAngle);
+        leftServo.write(90 - HorizontalServoAngle);
       }
     } else {
         rightServo.write(90);
